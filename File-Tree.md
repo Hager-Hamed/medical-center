@@ -68,10 +68,50 @@ medical-center/
 │   ├─ styles/
 │   │   └─ globals.css
 │   │
-│   └─ utils/
+│   └─ utils/ 
 │       └─ formatDate.ts
 │
 ├─ tsconfig.json
 ├─ package.json
 ├─ tailwind.config.js  (اختياري لو تستخدم Tailwind)
 └─ next.config.js
+
+
+
+
+
+
+
+
+features/
+├─ blog/
+│  ├─ BlogList.tsx
+│  ├─ BlogCard.tsx
+│  └─ BlogDetails.tsx
+│
+├─ services/
+│  ├─ ServicesList.tsx
+│  ├─ ServiceCard.tsx
+│  └─ ServiceDetails.tsx
+│
+├─ doctors/
+│  ├─ DoctorsList.tsx
+│  ├─ DoctorCard.tsx
+│  └─ DoctorDetails.tsx
+│
+├─ departments/
+│  ├─ DepartmentsList.tsx
+│  ├─ DepartmentCard.tsx
+│  └─ DepartmentDetails.tsx
+│
+├─ branches/
+│  ├─ BranchesList.tsx
+│  └─ BranchDetails.tsx
+│
+├─ offers/
+│  ├─ OffersList.tsx
+│  └─ OfferDetails.tsx
+│
+└─ news/
+   ├─ NewsList.tsx
+   └─ NewsDetails.tsx
