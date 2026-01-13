@@ -14,10 +14,10 @@ export default function LanguageSwitcher({ currentLocale }: LanguageSwitcherProp
   const switchLocale = () => {
     const newLocale: Locale = currentLocale === "en" ? "ar" : "en";
     
-    // حفظ اللغة المفضلة (اختياري، لكن مفيد للزيارات القادمة)
-    // نستخدمه فقط عند التبديل، ولا نعتمد عليه في الرندر الأولي
+    // حفظ اللغة في Cookie للاستخدام في Middleware
     if (typeof window !== "undefined") {
-        localStorage.setItem("locale", newLocale);
+      localStorage.setItem("locale", newLocale);
+      document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
     }
 
     const segments = pathname.split("/").filter(Boolean);
