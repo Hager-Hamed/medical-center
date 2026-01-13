@@ -1,30 +1,46 @@
-import { getBlogs } from "@/app/lib/api";
-import Link from "next/link";
+import { getBlogBySlug } from "@/app/lib/api/blog";
+import { Locale } from "@/app/types/blog";
+import { notFound } from "next/navigation";
+import Image from "next/image";
 
-interface BlogPageProps {
-  params: { locale: string };
+interface BlogPostProps {
+  params: Promise<{
+    locale: string;
+    slug: string;
+  }>;
 }
 
-export default async function BlogPage({ params }: BlogPageProps) {
-  const locale = params.locale === "ar" ? "ar" : "en";
-  const blogs = await getBlogs();
+export default async function BlogPost({ params }: BlogPostProps) {
+  const { locale: localeStr, slug } = await params;
+  const locale = (localeStr === "ar" ? "ar" : "en") as Locale;
+  
+  const blog = await getBlogBySlug(slug);
+
+  if (!blog) {
+    notFound();
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">
-        {locale === "ar" ? "المدونة" : "Blogs"}
-      </h1>
-      <div className="grid gap-6">
-        {blogs.map((blog) => (
-          <Link
-            key={blog.id}
-            href={`/${locale}/blog/${blog.slug}`}
-            className="block p-4 border rounded hover:shadow-md transition"
-          >
-            <h2 className="text-xl font-semibold">{blog.title[locale]}</h2>
-            <p className="text-gray-600">{blog.excerpt?.[locale]}</p>
-          </Link>
-        ))}
+      <h1 className="text-3xl font-bold mb-4">{blog.title[locale]}</h1>
+      <div className="text-gray-500 mb-6 text-sm">{blog.created_at}</div>
+      
+      {blog.image && (
+        <div className="relative w-full h-64 mb-6">
+           {/* Using simple img tag if domain not configured in next.config, 
+               but Image is better. Assuming local images or configured domains. 
+               If simple path, Image works with width/height or fill. */}
+           <Image 
+             src={blog.image} 
+             alt={blog.title[locale]} 
+             fill
+             className="object-cover rounded"
+           />
+        </div>
+      )}
+
+      <div className="prose max-w-none whitespace-pre-wrap">
+        {blog.content[locale]}
       </div>
     </div>
   );

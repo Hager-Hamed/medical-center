@@ -83,27 +83,24 @@
 //   );
 // }
 import "./globals.css";
-import LanguageSwitcher from "../components/LanguageSwitcher";
+import Navbar from "../components/Navbar";
 import { ReactNode } from "react";
+import { Locale } from "../lib/locale";
 
 interface RootLayoutProps {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-export default function RootLayout({ children, params }: RootLayoutProps) {
-  const locale = params.locale === "ar" ? "ar" : "en";
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+  const { locale: localeStr } = await params;
+  const locale = (localeStr === "ar" ? "ar" : "en") as Locale;
   const dir = locale === "ar" ? "rtl" : "ltr";
 
   return (
     <html lang={locale} dir={dir}>
       <body className="min-h-screen flex flex-col">
-        <header className="p-4 border-b flex justify-between items-center">
-          <h1 className="text-xl font-bold">
-            {locale === "ar" ? "المركز الطبي" : "Medical Center"}
-          </h1>
-          <LanguageSwitcher />
-        </header>
+        <Navbar currentLocale={locale} />
 
         <main className="flex-1">{children}</main>
 
